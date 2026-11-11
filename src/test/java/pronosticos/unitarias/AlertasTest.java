@@ -49,4 +49,10 @@ class AlertasTest {
     void rechazaUnUmbralMayorQue100() {
         assertThrows(IllegalArgumentException.class, () -> calculadora.debeGenerarAlerta(12, 150));
     }
+
+    @Test
+    @DisplayName("Rechaza un umbral negativo")
+    void rechazaUnUmbralNegativo() {
+        assertThrows(IllegalArgumentException.class, () -> calculadora.debeGenerarAlerta(12, -5));
+    }
 }
