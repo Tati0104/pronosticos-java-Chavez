@@ -28,10 +28,23 @@ public class CalculadoraPronosticos {
         return sumar(ultimos) / ventana;
     }
 
+    /**
+     * Pronostica el siguiente periodo con suavización exponencial simple.
+     *
+     * <p>Fórmula: F(t+1) = F(t) + alfa · (D(t) − F(t)), empezando con F(2) = D(1).
+     * Cada pronóstico corrige el anterior una fracción alfa del error cometido.
+     * Con alfa 0 el pronóstico nunca cambia; con alfa 1 es la última demanda.
+     * Ejemplo: serie [120, 132, 128, 141, 138, 150] y alfa 0.3 → 137.5546.
+     */
     public double suavizacionExponencial(List<Double> serie, double alfa) {
+        if (alfa < 0 || alfa > 1) {
+            throw new IllegalArgumentException("Alfa debe estar entre 0 y 1");
+        }
+
         double pronostico = serie.get(0);
-        for (int i = 1; i < serie.size(); i++) {
-            pronostico = alfa * serie.get(i) + (1 - alfa) * pronostico;
+        for (int periodo = 1; periodo < serie.size(); periodo++) {
+            double demanda = serie.get(periodo);
+            pronostico = pronostico + alfa * (demanda - pronostico);
         }
         return pronostico;
     }
